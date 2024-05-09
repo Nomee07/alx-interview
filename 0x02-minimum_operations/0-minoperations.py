@@ -3,6 +3,7 @@
 Calculates the fewest num of ops needed to result in n H characters in a file.
 """
 
+
 def minOperations(n):
     """
     Calculates the fewest number of operations needed.
