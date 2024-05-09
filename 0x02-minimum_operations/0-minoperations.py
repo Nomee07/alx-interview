@@ -15,14 +15,8 @@ def minOperations(n):
               Returns 0 if n is impossible to achieve.
     """
     if n <= 1:
-        return n
+        return 0
 
-    dp = [0] * (n + 1)
-
-    for i in range(2, n + 1):
-        dp[i] = i
-        for j in range(1, i // 2 + 1):
-            if i % j == 0:
-                dp[i] = min(dp[i], dp[j] + i // j)
-
-    return dp[n]
+    for op in range(2, n + 1):
+        if n % op == 0:
+            return minOperations(int(n/op)) + op
