@@ -4,6 +4,7 @@ This module contains the validUTF8 function to validate UTF-8 encoding.
 """
 
 
+
 def validUTF8(data):
     """
     Determines if a given data set represents a valid UTF-8 encoding.
@@ -18,8 +19,8 @@ def validUTF8(data):
     num_bytes = 0
 
     # Masks to check the most significant bits
-    mask1 = 1 << 7  # 10000000
-    mask2 = 1 << 6  # 01000000
+    mask1 = 1 << 7
+    mask2 = 1 << 6
 
     # Iterate over each integer in the data
     for num in data:
