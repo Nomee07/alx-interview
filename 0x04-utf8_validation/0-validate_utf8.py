@@ -3,6 +3,7 @@
 This module contains the validUTF8 function to validate UTF-8 encoding.
 """
 
+
 def validUTF8(data):
     """
     Determines if a given data set represents a valid UTF-8 encoding.
