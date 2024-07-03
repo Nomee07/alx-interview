@@ -1,64 +1,66 @@
 #!/usr/bin/python3
-"""
-A set of consecutive integers starting from 1 up to and including n.
-"""
-
-
-def is_prime(num):
-    """ Returns True if num is a prime number, otherwise False """
-    if num <= 1:
-        return False
-    if num <= 3:
-        return True
-    if num % 2 == 0 or num % 3 == 0:
-        return False
-    i = 5
-    while i * i <= num:
-        if num % i == 0 or num % (i + 2) == 0:
-            return False
-        i += 6
-    return True
-
-
-def sieve_of_eratosthenes(max_num):
-    """ Returns a list of primes up to max_num using Sieve of Eratosthenes """
-    is_prime = [True] * (max_num + 1)
-    p = 2
-    while p * p <= max_num:
-        if is_prime[p]:
-            for i in range(p * p, max_num + 1, p):
-                is_prime[i] = False
-        p += 1
-    prime_numbers = []
-    for p in range(2, max_num + 1):
-        if is_prime[p]:
-            prime_numbers.append(p)
-    return prime_numbers
+'''Prime Game'''
 
 
 def isWinner(x, nums):
-    max_num = max(nums)  # Determine the maximum n we need to consider
-    prime_numbers = sieve_of_eratosthenes(max_num)
-    prime_set = set(prime_numbers)  # Convert to set for O(1) lookup
+    '''finds the winner'''
+    winnerCounter = {'Maria': 0, 'Ben': 0}
 
-    # Counting wins
-    maria_wins = 0
-    ben_wins = 0
+    for i in range(x):
+        roundWinner = isRoundWinner(nums[i], x)
+        if roundWinner is not None:
+            winnerCounter[roundWinner] += 1
 
-    for n in nums:
-        prime_count = sum(1 for num in range(1, n + 1) if num in prime_set)
-
-        # Maria always starts first
-        if prime_count % 2 == 0:
-            # If the number of primes is even, Ben wins
-            ben_wins += 1
-        else:
-            # If the number of primes is odd, Maria wins because she starts
-            maria_wins += 1
-
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
+    if winnerCounter['Maria'] > winnerCounter['Ben']:
+        return 'Maria'
+    elif winnerCounter['Ben'] > winnerCounter['Maria']:
+        return 'Ben'
     else:
-        return None  # If it's a tie
+        return None
+
+
+def isRoundWinner(n, x):
+    '''find round winner'''
+    list = [i for i in range(1, n + 1)]
+    players = ['Maria', 'Ben']
+
+    for i in range(n):
+        # get current player
+        currentPlayer = players[i % 2]
+        selectedIdxs = []
+        prime = -1
+        for idx, num in enumerate(list):
+            # if already picked prime num then
+            # find if num is multipl of the prime num
+            if prime != -1:
+                if num % prime == 0:
+                    selectedIdxs.append(idx)
+            # else check is num is prime then pick it
+            else:
+                if isPrime(num):
+                    selectedIdxs.append(idx)
+                    prime = num
+        # if failed to pick then current player lost
+        if prime == -1:
+            if currentPlayer == players[0]:
+                return players[1]
+            else:
+                return players[0]
+        else:
+            for idx, val in enumerate(selectedIdxs):
+                del list[val - idx]
+    return None
+
+
+def isPrime(n):
+    # 0, 1, even numbers greater than 2 are NOT PRIME
+    if n == 1 or n == 0 or (n % 2 == 0 and n > 2):
+        return False
+    else:
+        # Not prime if divisable by another number less
+        # or equal to the square root of itself.
+        # n**(1/2) returns square root of n
+        for i in range(3, int(n**(1/2))+1, 2):
+            if n % i == 0:
+                return "Not prime"
+        return True
